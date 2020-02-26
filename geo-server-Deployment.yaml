@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: geo-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: geo-server
+  template:
+    metadata:
+      labels:
+        role: geo-server
+    spec:
+      containers:
+      - name: geo-server
+        image: kartoza/geoserver
+        ports:
+          - name: geoserver
+            containerPort: 8080
+          - name: mountd
+            containerPort: 20048
+          - name: rpcbind
+            containerPort: 111
+        securityContext:
+          privileged: true
+        volumeMounts: 
+          - mountPath: /exports
+            name: mypvc
+      volumes:
+        - name: mypvc
+          gcePersistentDisk:
+            pdName: geo-nfs-disk
+            fsType: ext4
+

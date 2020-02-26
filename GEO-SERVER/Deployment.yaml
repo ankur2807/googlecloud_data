@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: geo-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: geo-server
+  template:
+    metadata:
+      labels:
+        role: geo-server
+    spec:
+      containers:
+      - name: geo-server
+        #image: geodatalaborg/geospatialgeoserver:2.16.0
+        image: kartoza/geoserver
+        resources:
+          requests:
+            cpu: 100m
+            memory: 1024Mi
+          limits:
+            cpu: 500m
+            memory: 2048Mi
+        ports:
+          - name: geoserver
+            containerPort: 8080
+        env:
+          - name: GEOSERVER_DATA_DIR
+            value: /geo_server_data_dir
+        volumeMounts: 
+          - mountPath: /geo_server_data_dir
+            name: mypvc
+      volumes:
+        - name: mypvc
+          persistentVolumeClaim:
+            claimName: nfs-pv-claim-geoserver
+

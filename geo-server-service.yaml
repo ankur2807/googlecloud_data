@@ -1,0 +1,10 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: geo-server
+spec:
+  selector:
+    role: geo-server
+  ports:
+    - name: nfs
+      port: 8080

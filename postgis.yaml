@@ -1,0 +1,8 @@
+
+FROM bitnami/postgresql:10.6.0
+
+USER root
+
+RUN yum update -y && yum install -y postgis
+
+USER 1001
